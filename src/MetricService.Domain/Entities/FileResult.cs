@@ -38,6 +38,9 @@ public class FileResult : BaseEntity<Guid>
         ICollection<MetricValue> metricValues
         )
     {
+        if (string.IsNullOrWhiteSpace(fileName))
+            throw new InvalidFileNameException("File name can't be null or empty.");
+
         var result = new FileResult(fileName);
 
         result.AddMetricValueRange(metricValues);
@@ -95,6 +98,8 @@ public class FileResult : BaseEntity<Guid>
             return;
 
         _metricValues.Add(metricValue);
+
+        metricValue.LinkToFileResult(this);// Настройка связи
     }
 
     private void CalculateDate()

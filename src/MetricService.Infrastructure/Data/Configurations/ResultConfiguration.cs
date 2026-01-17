@@ -19,7 +19,7 @@ public class ResultConfiguration : IEntityTypeConfiguration<FileResult>
 
         builder.Property(r => r.FileName)
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(255);
 
         builder.Property(r => r.DeltaTimeSeconds)
             .IsRequired()
