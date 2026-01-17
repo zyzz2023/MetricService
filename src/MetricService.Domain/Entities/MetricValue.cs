@@ -22,6 +22,7 @@ public class MetricValue : BaseEntity<Guid>
 
     private MetricValue(DateTime date, double executionTime, double value)
     {
+        Id = Guid.NewGuid();
         Date = date;
         ExecutionTime = executionTime;
         Value = value;

@@ -32,6 +32,7 @@ internal class ValueConfiguration : IEntityTypeConfiguration<MetricValue>
         builder.HasOne(v => v.Result)
             .WithMany(r => r.MetricValues)
             .HasForeignKey(v => v.ResultId)
+            .IsRequired()
             .OnDelete(DeleteBehavior.Cascade);
     }
 }
