@@ -17,6 +17,10 @@ internal class ValueConfiguration : IEntityTypeConfiguration<MetricValue>
 
         builder.HasKey(v => v.Id);
 
+        builder.Property(r => r.FileName)
+            .IsRequired()
+            .HasMaxLength(255);
+
         builder.Property(v => v.Date)
             .IsRequired()
             .HasColumnType("timestamp with time zone");
