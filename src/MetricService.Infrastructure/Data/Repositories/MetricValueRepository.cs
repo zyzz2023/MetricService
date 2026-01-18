@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MetricService.Infrastructure.Data.Repositories
 {
-    public class MetricValueRepository : Repository<MetricValue>, IMetricValueRepository
+    public class MetricValueRepository : GenericRepository<MetricValue>, IMetricValueRepository
     {
         public MetricValueRepository(ApplicationDbContext context) : base(context) { }
 

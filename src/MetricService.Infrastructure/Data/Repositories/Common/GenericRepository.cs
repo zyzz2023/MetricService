@@ -10,14 +10,13 @@ using System.Threading.Tasks;
 
 namespace MetricService.Infrastructure.Data.Repositories.Common;
 
-// Generic Repository
-public class Repository<TEntity> : IRepository<TEntity> 
+public class GenericRepository<TEntity> : IRepository<TEntity> 
     where TEntity : BaseEntity<Guid>
 {
     protected readonly ApplicationDbContext _context;
     protected readonly DbSet<TEntity> _dbSet;
 
-    public Repository(ApplicationDbContext context)
+    public GenericRepository(ApplicationDbContext context)
     {
         _context = context;
         _dbSet = context.Set<TEntity>();

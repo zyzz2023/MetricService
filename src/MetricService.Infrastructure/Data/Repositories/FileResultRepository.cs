@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MetricService.Infrastructure.Data.Repositories;
 
-public class FileResultRepository : Repository<FileResult>, IFileResultRepository
+public class FileResultRepository : GenericRepository<FileResult>, IFileResultRepository
 {
     public FileResultRepository(ApplicationDbContext context) : base(context) { }
 

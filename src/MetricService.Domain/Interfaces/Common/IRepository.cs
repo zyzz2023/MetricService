@@ -25,14 +25,6 @@ public interface IRepository<TEntity> where TEntity : class
         int? take = null,
         CancellationToken cancellationToken = default);
 
-    //Task<int> CountAsync(
-    //   Expression<Func<TEntity, bool>>? predicate = null,
-    //   CancellationToken cancellationToken = default);
-
-    //Task<bool> AnyAsync(
-    //    Expression<Func<TEntity, bool>> predicate,
-    //    CancellationToken cancellationToken = default);
-
     /// <summary>
     /// Добавление сущности в бд
     /// </summary>
