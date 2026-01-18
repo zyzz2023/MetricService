@@ -4,41 +4,67 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MetricService.Infrastructure.Data.Repositories.Common;
 
-public class Repository<T> : IRepository<T> 
-    where T : BaseEntity<Guid>
+// Generic Repository
+public class Repository<TEntity> : IRepository<TEntity> 
+    where TEntity : BaseEntity<Guid>
 {
     protected readonly ApplicationDbContext _context;
+    protected readonly DbSet<TEntity> _dbSet;
 
     public Repository(ApplicationDbContext context)
     {
         _context = context;
+        _dbSet = context.Set<TEntity>();
     }
 
-    public async Task AddAsync(T entity)
+    public async Task<IEnumerable<TEntity>> GetFilteredAsync(
+        Expression<Func<TEntity, bool>>? predicate = null, 
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null, 
+        int? skip = null, 
+        int? take = null, 
+        CancellationToken cancellationToken = default)
     {
-        await _context.Set<T>().AddAsync(entity);
-    }
+        IQueryable<TEntity> query = _dbSet;
 
-    public void Delete(T entity)
-    {
-        _context.Set<T>().Remove(entity);
-    }
+        if(predicate != null)
+            query = query.Where(predicate);
 
-    public async Task<bool> IsExsist(T entity)
-    {
-        var result = await _context.Set<T>()
+        if(orderBy != null)
+            query = orderBy(query);
+
+        if(skip.HasValue)
+            query = query.Skip(skip.Value);
+
+        if(take.HasValue)
+            query = query.Take(take.Value);
+
+        return await query
             .AsNoTracking()
-            .FirstOrDefaultAsync();
-
-        return result != null;
+            .ToListAsync(cancellationToken);
     }
 
-    public void Update(T entity)
+    public async Task AddAsync(TEntity entity)
+    {
+        await _context.Set<TEntity>().AddAsync(entity);
+    }
+
+    public void Delete(TEntity entity)
+    {
+        _context.Set<TEntity>().Remove(entity);
+    }
+    
+    public async Task<bool> IsExsist(TEntity entity)
+    {
+        return await _context.Set<TEntity>().AnyAsync();
+    }
+
+    public void Update(TEntity entity)
     {
         _context.Update(entity);
     }

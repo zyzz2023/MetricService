@@ -1,4 +1,6 @@
-﻿using MetricService.Infrastructure.Data;
+﻿using MetricService.Domain.Interfaces;
+using MetricService.Infrastructure.Data;
+using MetricService.Infrastructure.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,9 @@ public static class DependencyInjection
         {
             options.UseNpgsql(connectionString);
         });
+
+        services.AddScoped<IFileResultRepository, FileResultRepository>();
+        services.AddScoped<IMetricValueRepository, MetricValueRepository>();
 
         return services;
     }

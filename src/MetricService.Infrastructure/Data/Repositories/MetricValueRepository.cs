@@ -14,7 +14,7 @@ namespace MetricService.Infrastructure.Data.Repositories
     {
         public MetricValueRepository(ApplicationDbContext context) : base(context) { }
 
-        public async Task<ICollection<MetricValue>> GetFilteredAsync(
+        public async Task<ICollection<MetricValue>> GetLatestByFileNameAsync(
             string fileName, 
             int count = 10, 
             CancellationToken cancellationToken = default)

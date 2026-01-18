@@ -1,38 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MetricService.Domain.Interfaces.Common;
 
-public interface IRepository<T> where T : class
+public interface IRepository<TEntity> where TEntity : class
 {
+    /// <summary>
+    /// Универсальный метод для фильтрации, сортировки и пагинации
+    /// </summary>
+    /// <param name="predicate"></param>
+    /// <param name="orderBy"></param>
+    /// <param name="skip"></param>
+    /// <param name="take"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    Task<IEnumerable<TEntity>> GetFilteredAsync(
+        Expression<Func<TEntity,bool>>? predicate = null,
+        Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+        int? skip = null,
+        int? take = null,
+        CancellationToken cancellationToken = default);
+
+    //Task<int> CountAsync(
+    //   Expression<Func<TEntity, bool>>? predicate = null,
+    //   CancellationToken cancellationToken = default);
+
+    //Task<bool> AnyAsync(
+    //    Expression<Func<TEntity, bool>> predicate,
+    //    CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Добавление сущности в бд
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    Task AddAsync(T entity);
+    Task AddAsync(TEntity entity);
 
     /// <summary>
     /// Обновление сущности
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    void Update(T entity);
+    void Update(TEntity entity);
 
     /// <summary>
     /// Удаление сущности
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    void Delete(T entity);
+    void Delete(TEntity entity);
 
     /// <summary>
     /// Проверка наличия сущности в бд
     /// </summary>
     /// <param name="entity"></param>
     /// <returns></returns>
-    Task<bool> IsExsist(T entity);
+    Task<bool> IsExsist(TEntity entity);
 }

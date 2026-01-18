@@ -45,34 +45,4 @@ public class FileResultRepository : Repository<FileResult>, IFileResultRepositor
             throw;
         }
     }
-
-    public async Task<ICollection<FileResult>> GetFilteredAsync(
-        string? fileName, 
-        DateTime? startDateFrom, 
-        DateTime? startDateTo, 
-        double? averageValueFrom, 
-        double? averageValueTo, 
-        double? averageExecutionTimeFrom,
-        double? averageExecutionTimeTo, 
-        int page = 1, 
-        int pageSize = 50, 
-        CancellationToken cancellationToken = default)
-    {
-        var query = _context.Results.AsQueryable();
-
-        query = ResultFilters.ApplyFilters(query, fileName, 
-            startDateFrom, startDateTo,
-            averageValueFrom, averageValueTo, 
-            averageExecutionTimeFrom, averageExecutionTimeTo);
-
-        var totalCount = query.CountAsync(cancellationToken);
-
-        var result = await query
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize)
-            .AsNoTracking()
-            .ToListAsync(cancellationToken);
-
-        return result;
-    }
 }

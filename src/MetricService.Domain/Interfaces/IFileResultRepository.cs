@@ -9,24 +9,15 @@ using System.Threading.Tasks;
 
 namespace MetricService.Domain.Interfaces;
 
+/// <summary>
+/// Разделение репозиториев для разных сущностей
+/// необходимо для дальнейшего добавления уникальных методов
+/// </summary>
 public interface IFileResultRepository : IRepository<FileResult>
 {
     Task AddWithOverwriteAsync(
         string fileName, 
         FileResult fileResult, 
         CancellationToken cancellationToken
-        );
-
-    Task<ICollection<FileResult>> GetFilteredAsync(
-        string? fileName,
-        DateTime? startDateFrom,
-        DateTime? startDateTo,
-        double? averageValueFrom,
-        double? averageValueTo,
-        double? averageExecutionTimeFrom,
-        double? averageExecutionTimeTo,
-        int page = 1,
-        int pageSize = 50,
-        CancellationToken cancellationToken = default
         );
 }

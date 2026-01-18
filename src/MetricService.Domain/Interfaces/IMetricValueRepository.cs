@@ -11,7 +11,7 @@ namespace MetricService.Domain.Interfaces
 {
     public interface IMetricValueRepository : IRepository<MetricValue>
     {
-        Task<ICollection<MetricValue>> GetFilteredAsync(
+        Task<ICollection<MetricValue>> GetLatestByFileNameAsync(
             string fileName,
             int count = 10,
             CancellationToken cancellationToken = default
