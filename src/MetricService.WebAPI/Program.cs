@@ -1,3 +1,4 @@
+using MetricService.Application;
 using MetricService.Infrastructure;
 using MetricService.WebAPI;
 using MetricService.WebAPI.Common;
@@ -6,8 +7,8 @@ using Microsoft.AspNetCore.Builder;
 var builder = WebApplication.CreateBuilder(args);
 {
     builder.Services.AddPresentation();
+    builder.Services.AddApplication();
     builder.Services.AddInfrastructure(builder.Configuration);
-    
 }
 
 

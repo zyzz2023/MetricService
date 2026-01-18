@@ -9,12 +9,15 @@
 
   <ItemGroup>
     <PackageReference Include="Extensions.Hosting.AsyncInitialization" Version="3.0.1" />
+    <PackageReference Include="MediatR" Version="14.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.12" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="9.0.6" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MetricService.Application\MetricService.Application.csproj" />
+    <ProjectReference Include="..\MetricService.Contracts\MetricService.Contracts.csproj" />
     <ProjectReference Include="..\MetricService.Infrastructure\MetricService.Infrastructure.csproj" />
   </ItemGroup>
 
