@@ -12,8 +12,6 @@ namespace MetricService.Infrastructure.Data.Repositories
 {
     public class MetricValueRepository : Repository<MetricValue>, IMetricValueRepository
     {
-        private readonly ApplicationDbContext _context;
-
         public MetricValueRepository(ApplicationDbContext context) : base(context) { }
 
         public async Task<ICollection<MetricValue>> GetFilteredAsync(

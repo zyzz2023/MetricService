@@ -14,8 +14,6 @@ namespace MetricService.Infrastructure.Data.Repositories;
 
 public class FileResultRepository : Repository<FileResult>, IFileResultRepository
 {
-    private readonly ApplicationDbContext _context;
-
     public FileResultRepository(ApplicationDbContext context) : base(context) { }
 
     public async Task AddWithOverwriteAsync(
