@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 namespace MetricService.Contracts.Requests;
 
 public record GetFilteredResultsRequest(
-    string? fileName,
-    DateTime? fromDate = null,
-    DateTime? toDate = null,
-    double? fromAverageValue = null,
-    double? toAverageValue = null,
-    double? fromAverageExecutionTime = null,
-    double? toAverageExecutionTime = null,
-    int? take = null);
+    string? FileName,
+    DateTime? FromDate = null,
+    DateTime? ToDate = null,
+    double? FromAverageValue = null,
+    double? ToAverageValue = null,
+    double? FromAverageExecutionTime = null,
+    double? ToAverageExecutionTime = null);

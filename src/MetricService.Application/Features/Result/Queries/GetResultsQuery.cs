@@ -9,14 +9,11 @@ using System.Threading.Tasks;
 
 namespace MetricService.Application.Features.Result.Queries;
 
-public class GetResultsQuery : IRequest<ErrorOr<ICollection<FileResultDto>>>
-{
-    public string? FileName { get; set; }
-    public DateTime? FromDate { get; set; }
-    public DateTime? ToDate { get; set; }
-    public double? FromAverageValue { get; set; }
-    public double? ToAverageValue { get; set; }
-    public double? FromAverageExecutionTime { get; set; }
-    public double? ToAverageExecutionTime { get; set; }
-    public int? Take { get; set; }
-}
+public record GetResultsQuery(
+    string? FileName,
+    DateTime? FromDate,
+    DateTime? ToDate,
+    double? FromAverageValue,
+    double? ToAverageValue,
+    double? FromAverageExecutionTime,
+    double? ToAverageExecutionTime) : IRequest<ErrorOr<ICollection<FileResultDto>>>;
