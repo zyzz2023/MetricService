@@ -1,8 +1,10 @@
-﻿using MetricService.WebAPI.Common;
-using System.Reflection;
-using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using Mapster;
+using MetricService.Application.Common.Mappings;
+using MetricService.WebAPI.Common;
 using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System.Reflection;
 
 namespace MetricService.WebAPI
 {
@@ -13,6 +15,8 @@ namespace MetricService.WebAPI
             services.AddControllers();
 
             services.AddConfiguredSwagger();
+
+            services.AddConfiguredMapster();
 
             services.AddAsyncInitializer<DbInitializer>();
 
@@ -34,6 +38,18 @@ namespace MetricService.WebAPI
             });
 
             return services;
+        }
+
+        private static void AddConfiguredMapster(this IServiceCollection services)
+        {
+            var applicationAssembly = typeof(ResultMappingConfiguration).Assembly;
+            var presentationAssembly = typeof(ResultRequestsMappingConfig).Assembly;
+
+            var configuration = TypeAdapterConfig.GlobalSettings;
+            configuration.Scan(applicationAssembly, presentationAssembly);
+
+            services.AddSingleton(configuration);
+            services.AddMapster();
         }
     }
 }

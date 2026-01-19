@@ -10,4 +10,8 @@ public record GetFilteredResultsRequest(
     string? fileName,
     DateTime? fromDate = null,
     DateTime? toDate = null,
+    double? fromAverageValue = null,
+    double? toAverageValue = null,
+    double? fromAverageExecutionTime = null,
+    double? toAverageExecutionTime = null,
     int? take = null);

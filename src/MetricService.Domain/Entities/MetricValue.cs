@@ -1,5 +1,6 @@
-﻿using MetricService.Domain.Common;
-using MetricService.Domain.Exceptions;
+﻿using ErrorOr;
+using MetricService.Domain.Common;
+using MetricService.Domain.Common.Errors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,31 +34,28 @@ public class MetricValue : BaseEntity<Guid>
 
     public static MetricValue Create(string fileName, DateTime date, double executionTime, double value)
     {
-        Validate(fileName, date, executionTime, value);
+        //Validate(fileName, date, executionTime, value);
 
         return new MetricValue(fileName, date, executionTime, value);
     }
 
     private static void Validate(string fileName, DateTime date, double executionTime, double value)
     {
-        if (string.IsNullOrWhiteSpace(fileName))
-            throw new InvalidFileNameException("File name can't be null or empty.");
+        //if (string.IsNullOrWhiteSpace(fileName))
+        //    throw new InvalidFileNameException("File name can't be null or empty.");
 
-        if (date > DateTime.Now || date < new DateTime(2000, 01, 01))
-            throw new InvalidDateException("The date cannot be later than the current date or earlier than 01.01.2000");
+        //if (date > DateTime.Now || date < new DateTime(2000, 01, 01))
+        //    return DomainError.InvalidDateTime;
 
-        if (executionTime < 0)
-            throw new InvalidExecutionTimeException("The execution time cannot be less than 0");
+        //if (executionTime < 0)
+        //    throw new InvalidExecutionTimeException("The execution time cannot be less than 0");
 
-        if (value < 0)
-            throw new InvalidMetricValueException("The value cannot be less than 0");
+        //if (value < 0)
+        //    throw new InvalidMetricValueException("The value cannot be less than 0");
     }
 
     internal void LinkToFileResult(FileResult fileResult)
     {
-        if (fileResult == null)
-            throw new InvalidFileResultException("File result cannot be null.");
-
         ResultId = fileResult.Id;
         Result = fileResult;
     }

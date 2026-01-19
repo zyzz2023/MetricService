@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using FluentValidation;
+using MetricService.Application.Common.Behaviors;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +20,17 @@ public static class DependencyInjection
             options.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
 
+        services.AddValidators();
+
         return services;
+    }
+
+    private static void AddValidators(this IServiceCollection services)
+    {
+        services.AddScoped(
+            typeof(IPipelineBehavior<,>),
+            typeof(ValidationBehavior<,>));
+
+        services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

@@ -1,10 +1,11 @@
 ﻿using MetricService.Domain.Common;
-using MetricService.Domain.Exceptions;
+using ErrorOr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MetricService.Domain.Common.Errors;
 
 namespace MetricService.Domain.Entities;
 
@@ -35,48 +36,24 @@ public class FileResult : BaseEntity<Guid>
 
     public static FileResult Create(
         string fileName,
-        ICollection<MetricValue> metricValues
-        )
+        ICollection<MetricValue> metricValues)
     {
-        if (string.IsNullOrWhiteSpace(fileName))
-            throw new InvalidFileNameException("File name can't be null or empty.");
+        //if (string.IsNullOrWhiteSpace(fileName))
+        //    throw new InvalidFileNameException("File name can't be null or empty.");
 
         var result = new FileResult(fileName);
 
         result.AddMetricValueRange(metricValues);
 
-        result.CalculateFileResult();
-
         return result;
     }
 
-
-    private void AddMetricValueRange(ICollection<MetricValue> metricValues)
-    {
-        if (metricValues == null || !metricValues.Any())
-            throw new InvalidFileResultException("Metric values cannot be null or empty.");
-
-        // Проверка на валидность файла должна быть и на уровне Application,
-        // эта проверка является гарантом, что Result с неправильным списком
-        // не будет создан
-        if (metricValues.Count < 1 || metricValues.Count > 10000)
-            throw new InvalidFileResultException("Metric values must be greater than 1 and less than 10000.");
-
-        foreach (var metric in metricValues)
-        {
-            AddMetricValue(metric);
-        }
-    }
-
-    /// <summary>
-    /// Factory метод для подсчета показателей файла
-    /// При пустом _metricValues выдает исключение
-    /// </summary>
-    /// <exception cref="InvalidFileResultException"></exception>
-    private void CalculateFileResult()
+    // Factory метод для подсчета показателей файла
+    // При пустом _metricValues выдает исключение
+    public ErrorOr<bool> CalculateFileResult()
     {
         if (_metricValues == null || !_metricValues.Any())
-            throw new InvalidFileResultException("For calculate result - metric values cannot be null or empty.");
+            return DomainError.EmptyMetricValues;
 
         // StartTime, EndTime, DeltaTimeSeconds
         CalculateDate();
@@ -87,13 +64,30 @@ public class FileResult : BaseEntity<Guid>
         // MedianValue, MaxValue, MinValue
         CalculateStatistics();
 
+        return true;
+
+    }
+
+    private void AddMetricValueRange(ICollection<MetricValue> metricValues)
+    {
+        //if (metricValues == null || !metricValues.Any())
+        //    throw new InvalidFileResultException("Metric values cannot be null or empty.");
+
+        // Проверка на валидность файла должна быть и на уровне Application,
+        // эта проверка является гарантом, что Result с неправильным списком
+        // не будет создан
+
+        //if (metricValues.Count < 1 || metricValues.Count > 10000)
+        //    throw new InvalidFileResultException("Metric values must be greater than 1 and less than 10000.");
+
+        foreach (var metric in metricValues)
+        {
+            AddMetricValue(metric);
+        }
     }
 
     private void AddMetricValue(MetricValue metricValue)
     {
-        if (metricValue == null)
-            throw new InvalidFileResultException("Metric value cannot be null.");
-
         if (_metricValues.Any(m => m.Id == metricValue.Id))
             return;
 

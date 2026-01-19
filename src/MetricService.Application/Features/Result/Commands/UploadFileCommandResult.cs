@@ -4,6 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MetricService.Application.Features.UploadFile.Commands;
+namespace MetricService.Application.Features.Result.Commands;
 
-public record UploadFileResult(string fileName);
+public record UploadFileCommandResult(string fileName);

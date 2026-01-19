@@ -2,6 +2,7 @@ using MetricService.Application;
 using MetricService.Infrastructure;
 using MetricService.WebAPI;
 using MetricService.WebAPI.Common;
+using MetricService.WebAPI.Middleware;
 using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
