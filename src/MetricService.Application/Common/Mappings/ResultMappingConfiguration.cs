@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using MetricService.Application.Features.Metric.Common;
 using MetricService.Application.Features.Result.Common;
 using MetricService.Domain.Entities;
 using System;
@@ -15,6 +16,6 @@ public class ResultMappingConfiguration : IRegister
     {
         config.NewConfig<FileResultDto, FileResult>();
 
-       // config.NewConfig<MetricValue, MetricValueDto>();
+        config.NewConfig<MetricValueDto, MetricValue>();
     }
 }

@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace MetricService.Contracts.Requests;
 
-public record GetLatestValuesRequest(string fileName);
+public record GetLatestValuesRequest(string FileName);
 

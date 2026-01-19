@@ -9,11 +9,12 @@ using MetricService.WebAPI.Controllers.Common;
 using MapsterMapper;
 using MetricService.Application.Features.Result.Common;
 using MetricService.Application.Features.Result.Queries;
+using MetricService.Application.Features.Metric.Queries;
 
 namespace MetricService.WebAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class MetricsController : ApiController
     {
         private readonly ISender _mediator;
@@ -21,7 +22,7 @@ namespace MetricService.WebAPI.Controllers
         private readonly ILogger<MetricsController> _logger;
 
         public MetricsController(
-            ILogger<MetricsController> logger, 
+            ILogger<MetricsController> logger,
             ISender mediator,
             IMapper mapper)
         {
@@ -42,10 +43,22 @@ namespace MetricService.WebAPI.Controllers
                 errors => Problem(errors));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetResults([FromQuery]GetFilteredResultsRequest request, CancellationToken ct)
+        [HttpGet("results")]
+        public async Task<IActionResult> GetResults([FromQuery] GetFilteredResultsRequest request, CancellationToken ct)
         {
             var query = _mapper.Map<GetResultsQuery>(request);
+
+            var result = await _mediator.Send(query, ct);
+
+            return result.Match(
+                result => Ok(result),
+                errors => Problem(errors));
+        }
+
+        [HttpGet("metrics")]
+        public async Task<IActionResult> GetLatestMetrics([FromQuery] GetLatestValuesRequest request, CancellationToken ct)
+        {
+            var query = _mapper.Map<GetLatestMetricsQuery>(request);
 
             var result = await _mediator.Send(query, ct);
 
