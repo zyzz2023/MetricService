@@ -1,0 +1,68 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="DataForTests\Csv\invalid_less_1.csv" />
+    <None Remove="DataForTests\Csv\invalid_over_10000.csv" />
+    <None Remove="DataForTests\Csv\invalid_time_execution.csv" />
+    <None Remove="DataForTests\Csv\invalid_type_arguments.csv" />
+    <None Remove="DataForTests\Csv\invalid_value.csv" />
+    <None Remove="DataForTests\Csv\valid_row_1.csv" />
+    <None Remove="DataForTests\Csv\valid_row_10000.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\MetricService.Application\MetricService.Application.csproj" />
+    <ProjectReference Include="..\src\MetricService.Contracts\MetricService.Contracts.csproj" />
+    <ProjectReference Include="..\src\MetricService.Domain\MetricService.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="DataForTests\Csv\invalid_date_less.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\invalid_date_over.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\invalid_less_1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\invalid_over_10000.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\invalid_time_execution.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\invalid_type_arguments.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\invalid_value.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\valid_row_1.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="DataForTests\Csv\valid_row_10000.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 namespace MetricService.Application.Features.Result.Queries;
 
 public record GetResultsQuery(
-    string? FileName,
-    DateTime? FromDate,
-    DateTime? ToDate,
-    double? FromAverageValue,
-    double? ToAverageValue,
-    double? FromAverageExecutionTime,
-    double? ToAverageExecutionTime) : IRequest<ErrorOr<ICollection<FileResultDto>>>;
+    string? FileName = null,
+    DateTime? FromDate = null,
+    DateTime? ToDate = null,
+    double? FromAverageValue = null ,
+    double? ToAverageValue = null,
+    double? FromAverageExecutionTime = null,
+    double? ToAverageExecutionTime = null) : IRequest<ErrorOr<ICollection<FileResultDto>>>;
