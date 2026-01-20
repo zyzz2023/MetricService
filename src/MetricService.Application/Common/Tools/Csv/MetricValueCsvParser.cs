@@ -17,7 +17,7 @@ namespace MetricService.Application.Common.Tools.Csv;
 public sealed class MetricValueCsvParser
 {
     private const int minRows = 1;
-    private const int maxRows = 100;
+    private const int maxRows = 10000;
 
     public ErrorOr<ICollection<MetricValue>> Parse(IFormFile file)
     {
@@ -48,7 +48,7 @@ public sealed class MetricValueCsvParser
             if(result.Any(x => x.IsError))
                 return result.FirstOrDefault(x => x.IsError).FirstError;
 
-            if (result.Count > 10000 || result.Count < 1)
+            if (result.Count > maxRows || result.Count < minRows)
                 return Error.Validation("IVALID_ROWS_COUNT", "Rows count must be greater than 0 and less than 10000.");
 
             return result
