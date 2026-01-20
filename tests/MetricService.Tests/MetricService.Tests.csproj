@@ -27,12 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\MetricService.Application\MetricService.Application.csproj" />
-    <ProjectReference Include="..\src\MetricService.Contracts\MetricService.Contracts.csproj" />
-    <ProjectReference Include="..\src\MetricService.Domain\MetricService.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="DataForTests\Csv\invalid_date_less.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -60,6 +54,12 @@
     <Content Include="DataForTests\Csv\valid_row_10000.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\MetricService.Application\MetricService.Application.csproj" />
+    <ProjectReference Include="..\..\src\MetricService.Contracts\MetricService.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\MetricService.Domain\MetricService.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
