@@ -35,6 +35,8 @@ namespace MetricService.WebAPI
                     Version = "v1",
                     Description = "A service for working with timescale data results processing"
                 });
+
+                // Добавить фильтр
             });
 
             return services;

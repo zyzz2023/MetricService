@@ -9,5 +9,5 @@ using System.Threading.Tasks;
 
 namespace MetricService.Application.Features.Result.Commands;
 
-public record UploadFileCommand(string FilePath) : IRequest<ErrorOr<UploadFileCommandResult>>;
+public record UploadFileCommand(IFormFile file) : IRequest<ErrorOr<UploadFileCommandResult>>;
 

@@ -7,4 +7,4 @@ using System.Threading.Tasks;
 
 namespace MetricService.Contracts.Requests;
 
-public record UploadFileRequest(string filePath);
+public record UploadFileRequest(IFormFile file);

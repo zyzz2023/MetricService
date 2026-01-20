@@ -24,12 +24,9 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Error
     }
     public async Task<ErrorOr<UploadFileCommandResult>> Handle(UploadFileCommand request, CancellationToken cancellationToken)
     {
-        string fileName = Path.GetFileName(request.FilePath);
+        string fileName = request.file.FileName;
 
-        if (!File.Exists(request.FilePath))
-            return Error.Validation("IVALID_FILE_PATH", $"File {request.FilePath} doesn't exsists.");
-
-        var parseResult = _csvParser.Parse(request.FilePath);
+        var parseResult = _csvParser.Parse(request.file);
         if (parseResult.IsError)
             return parseResult.FirstError;
 

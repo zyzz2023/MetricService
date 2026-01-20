@@ -4,6 +4,7 @@ using ErrorOr;
 using MediatR;
 using MetricService.Contracts.Requests;
 using MetricService.Domain.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -18,16 +19,14 @@ public sealed class MetricValueCsvParser
     private const int minRows = 1;
     private const int maxRows = 100;
 
-    public ErrorOr<ICollection<MetricValue>> Parse(string filePath)
+    public ErrorOr<ICollection<MetricValue>> Parse(IFormFile file)
     {
         try
         {
-            string fileName = Path.GetFileName(filePath);
-            using var stream = File.OpenRead(filePath);
+            string fileName = file.FileName;
+            using var stream = new StreamReader(file.OpenReadStream());
 
-            using var reader = new StreamReader(stream);
-
-            using var csv = new CsvReader(reader, new CsvConfiguration(
+            using var csv = new CsvReader(stream, new CsvConfiguration(
                 CultureInfo.InvariantCulture)
             {
                 Delimiter = ";",

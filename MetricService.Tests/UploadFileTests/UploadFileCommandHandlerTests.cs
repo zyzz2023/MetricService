@@ -1,12 +1,14 @@
-﻿using System;
+﻿using MetricService.Application.Features.Result.Commands;
+using MetricService.Domain.Entities;
+using MetricService.Domain.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
+using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MetricService.Application.Features.Result.Commands;
-using MetricService.Domain.Entities;
-using MetricService.Domain.Interfaces;
-using Moq;
 
 namespace MetricService.Tests.UploadFileTests;
 
@@ -26,7 +28,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("invalid_value.csv");
-        var command = new UploadFileCommand(filePath);
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -47,8 +50,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("invalid_time_execution.csv");
-        var command = new UploadFileCommand(filePath);
-
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -68,8 +71,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("invalid_date_less.csv");
-        var command = new UploadFileCommand(filePath);
-
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -89,8 +92,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("invalid_date_over.csv");
-        var command = new UploadFileCommand(filePath);
-
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -110,8 +113,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("invalid_less_1.csv");
-        var command = new UploadFileCommand(filePath);
-
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -131,8 +134,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("invalid_over_10000.csv");
-        var command = new UploadFileCommand(filePath);
-
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -152,8 +155,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("invalid_type_arguments.csv");
-        var command = new UploadFileCommand(filePath);
-
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -173,7 +176,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("valid_row_1.csv");
-        var command = new UploadFileCommand(filePath);
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -194,7 +198,8 @@ public class UploadFileCommandHandlerTests
     {
         // Arrange 
         var filePath = TestFilePath("valid_row_10000.csv");
-        var command = new UploadFileCommand(filePath);
+        var formFile = CreateFormFileFromPath(filePath);
+        var command = new UploadFileCommand(formFile);
 
         // Act
         var result = await _handler.Handle(command, CancellationToken.None);
@@ -208,6 +213,19 @@ public class UploadFileCommandHandlerTests
                 It.IsAny<FileResult>(),
                 It.IsAny<CancellationToken>()),
             Times.Once);
+    }
+
+    private static IFormFile CreateFormFileFromPath(string filePath)
+    {
+        var fileName = Path.GetFileName(filePath);
+        var fileBytes = File.ReadAllBytes(filePath);
+        var stream = new MemoryStream(fileBytes);
+
+        return new FormFile(stream, 0, fileBytes.Length, "file", fileName)
+        {
+            Headers = new HeaderDictionary(),
+            ContentType = "text/csv"
+        };
     }
 
     private static string TestFilePath(string fileName)

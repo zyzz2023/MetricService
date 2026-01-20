@@ -32,9 +32,11 @@ public class MetricsController : ApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(UploadFileRequest request, CancellationToken ct)
+    [RequestSizeLimit(50 * 1024 * 1024)] // Ограничение 50 мб
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> Post([FromForm] UploadFileRequest request, CancellationToken ct)
     {
-        var command = new UploadFileCommand(request.filePath);
+        var command = new UploadFileCommand(request.file);
 
         var result = await _mediator.Send(command, ct);
 

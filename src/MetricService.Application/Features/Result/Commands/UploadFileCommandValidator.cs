@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,31 +15,11 @@ public class UploadFileCommandValidator : AbstractValidator<UploadFileCommand>
 {
     public UploadFileCommandValidator()
     {
-        RuleFor(c => c.FilePath)
-            .Must(str => !string.IsNullOrWhiteSpace(str))
-            .WithMessage("File name cannot be null or empty.")
-            .Must(BeValidFilePath)
-            .WithMessage("Invalid file path")
-            .Must(BeCsvFile)
+        RuleFor(c => c.file)
+            .NotEmpty()
+            .WithMessage("File cannot empty.")
+            .Must(c => string.Equals(Path.GetExtension(c.FileName).ToLower(), ".csv", StringComparison.OrdinalIgnoreCase))
             .WithMessage("File must be a CSV file");
     }
 
-    private bool BeValidFilePath(string filePath)
-    {
-        try
-        {
-            var fullPath = Path.GetFullPath(filePath);
-            return !string.IsNullOrWhiteSpace(fullPath);
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
-    private bool BeCsvFile(string filePath)
-    {
-        var extension = Path.GetExtension(filePath);
-        return string.Equals(extension, ".csv", StringComparison.OrdinalIgnoreCase);
-    }
 }
