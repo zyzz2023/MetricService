@@ -18,11 +18,15 @@ namespace MetricService.Application.Features.Result.Queries
 
             RuleFor(c => c.FromDate)
                 .Must(BeValidDate)
-                .WithMessage("'FromDate' must be between 2000.01.01 and today");
+                .WithMessage("'FromDate' must be between 2000.01.01 and today")
+                .Must(BeUtc)
+                .WithMessage("'FromDate' must be in yyyy-MM-ddTHH-mm-ss.ffffZ format");
 
             RuleFor(c => c.ToDate)
                 .Must(BeValidDate)
-                .WithMessage("'ToDate' must be between 2000.01.01 and today");
+                .WithMessage("'ToDate' must be between 2000.01.01 and today")
+                .Must(BeUtc)
+                .WithMessage("'ToDate' must be in yyyy-MM-ddTHH-mm-ss.ffffZ format");
 
             RuleFor(c => c.FromAverageValue)
                 .GreaterThanOrEqualTo(0)
@@ -52,10 +56,16 @@ namespace MetricService.Application.Features.Result.Queries
 
         private bool BeValidDate(DateTime? date)
         {
-            if(!date.HasValue) 
-                return true;
+            if(!date.HasValue) return true;
 
             return date >= new DateTime(2000, 01, 01) && date <= DateTime.UtcNow;
+        }
+
+        private bool BeUtc(DateTime? date)
+        {
+            if(!date.HasValue) return true;
+
+            return date.Value.Kind == DateTimeKind.Utc;
         }
     }
 }
