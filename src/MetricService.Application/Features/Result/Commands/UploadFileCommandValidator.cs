@@ -19,19 +19,14 @@ public class UploadFileCommandValidator : AbstractValidator<UploadFileCommand>
             .WithMessage("File name cannot be null or empty.")
             .Must(BeValidFilePath)
             .WithMessage("Invalid file path")
-            .Must(FileExists)
-            .WithMessage("File does not exist")
             .Must(BeCsvFile)
-            .WithMessage("File must be a CSV file")
-            .Must(FileIsReadable)
-            .WithMessage("File is not readable");
+            .WithMessage("File must be a CSV file");
     }
 
     private bool BeValidFilePath(string filePath)
     {
         try
         {
-            // Проверка валидности пути
             var fullPath = Path.GetFullPath(filePath);
             return !string.IsNullOrWhiteSpace(fullPath);
         }
@@ -41,28 +36,9 @@ public class UploadFileCommandValidator : AbstractValidator<UploadFileCommand>
         }
     }
 
-    private bool FileExists(string filePath)
-    {
-        return File.Exists(filePath);
-    }
-
     private bool BeCsvFile(string filePath)
     {
         var extension = Path.GetExtension(filePath);
         return string.Equals(extension, ".csv", StringComparison.OrdinalIgnoreCase);
     }
-
-    private bool FileIsReadable(string filePath)
-    {
-        try
-        {
-            using var stream = File.Open(filePath, FileMode.Open, FileAccess.Read);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-    
 }

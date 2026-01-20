@@ -26,9 +26,10 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Error
     {
         string fileName = Path.GetFileName(request.FilePath);
 
-        using var stream = File.OpenRead(request.FilePath);
+        if (!File.Exists(request.FilePath))
+            return Error.Validation("IVALID_FILE_PATH", $"File {request.FilePath} doesn't exsists.");
 
-        var parseResult = _csvParser.Parse(stream, fileName);
+        var parseResult = _csvParser.Parse(request.FilePath);
         if (parseResult.IsError)
             return parseResult.FirstError;
 

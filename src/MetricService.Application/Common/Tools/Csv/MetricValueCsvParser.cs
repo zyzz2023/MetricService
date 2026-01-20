@@ -1,6 +1,7 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using ErrorOr;
+using MediatR;
 using MetricService.Contracts.Requests;
 using MetricService.Domain.Entities;
 using System;
@@ -17,13 +18,14 @@ public sealed class MetricValueCsvParser
     private const int minRows = 1;
     private const int maxRows = 100;
 
-    public ErrorOr<ICollection<MetricValue>> Parse(
-        Stream csvStream, 
-        string fileName)
+    public ErrorOr<ICollection<MetricValue>> Parse(string filePath)
     {
         try
         {
-            using var reader = new StreamReader(csvStream);
+            string fileName = Path.GetFileName(filePath);
+            using var stream = File.OpenRead(filePath);
+
+            using var reader = new StreamReader(stream);
 
             using var csv = new CsvReader(reader, new CsvConfiguration(
                 CultureInfo.InvariantCulture)
