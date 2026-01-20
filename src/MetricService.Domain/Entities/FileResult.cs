@@ -38,9 +38,6 @@ public class FileResult : BaseEntity<Guid>
         string fileName,
         ICollection<MetricValue> metricValues)
     {
-        //if (string.IsNullOrWhiteSpace(fileName))
-        //    throw new InvalidFileNameException("File name can't be null or empty.");
-
         var result = new FileResult(fileName);
 
         result.AddMetricValueRange(metricValues);
@@ -49,7 +46,7 @@ public class FileResult : BaseEntity<Guid>
     }
 
     // Factory метод для подсчета показателей файла
-    // При пустом _metricValues выдает исключение
+    // При пустом _metricValues выдает ошибку
     public ErrorOr<bool> CalculateFileResult()
     {
         if (_metricValues == null || !_metricValues.Any())
@@ -70,16 +67,6 @@ public class FileResult : BaseEntity<Guid>
 
     private void AddMetricValueRange(ICollection<MetricValue> metricValues)
     {
-        //if (metricValues == null || !metricValues.Any())
-        //    throw new InvalidFileResultException("Metric values cannot be null or empty.");
-
-        // Проверка на валидность файла должна быть и на уровне Application,
-        // эта проверка является гарантом, что Result с неправильным списком
-        // не будет создан
-
-        //if (metricValues.Count < 1 || metricValues.Count > 10000)
-        //    throw new InvalidFileResultException("Metric values must be greater than 1 and less than 10000.");
-
         foreach (var metric in metricValues)
         {
             AddMetricValue(metric);

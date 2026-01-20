@@ -32,26 +32,18 @@ public class MetricValue : BaseEntity<Guid>
         Value = value;
     }
 
-    public static MetricValue Create(string fileName, DateTime date, double executionTime, double value)
+    public static ErrorOr<MetricValue> Create(string fileName, DateTime date, double executionTime, double value)
     {
-        //Validate(fileName, date, executionTime, value);
+        if (date < new DateTime(2000, 01, 01) || date > DateTime.UtcNow)
+            return DomainError.InvalidDateTime;
+
+        if(executionTime < 0)
+            return DomainError.InvalidExecutionTime;
+
+        if (value < 0)
+            return DomainError.InvalidValue;
 
         return new MetricValue(fileName, date, executionTime, value);
-    }
-
-    private static void Validate(string fileName, DateTime date, double executionTime, double value)
-    {
-        //if (string.IsNullOrWhiteSpace(fileName))
-        //    throw new InvalidFileNameException("File name can't be null or empty.");
-
-        //if (date > DateTime.Now || date < new DateTime(2000, 01, 01))
-        //    return DomainError.InvalidDateTime;
-
-        //if (executionTime < 0)
-        //    throw new InvalidExecutionTimeException("The execution time cannot be less than 0");
-
-        //if (value < 0)
-        //    throw new InvalidMetricValueException("The value cannot be less than 0");
     }
 
     internal void LinkToFileResult(FileResult fileResult)

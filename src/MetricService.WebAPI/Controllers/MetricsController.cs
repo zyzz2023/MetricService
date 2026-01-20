@@ -11,60 +11,59 @@ using MetricService.Application.Features.Result.Common;
 using MetricService.Application.Features.Result.Queries;
 using MetricService.Application.Features.Metric.Queries;
 
-namespace MetricService.WebAPI.Controllers
+namespace MetricService.WebAPI.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class MetricsController : ApiController
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class MetricsController : ApiController
+    private readonly ISender _mediator;
+    private readonly IMapper _mapper;
+    private readonly ILogger<MetricsController> _logger;
+
+    public MetricsController(
+        ILogger<MetricsController> logger,
+        ISender mediator,
+        IMapper mapper)
     {
-        private readonly ISender _mediator;
-        private readonly IMapper _mapper;
-        private readonly ILogger<MetricsController> _logger;
+        _logger = logger;
+        _mapper = mapper;
+        _mediator = mediator;
+    }
 
-        public MetricsController(
-            ILogger<MetricsController> logger,
-            ISender mediator,
-            IMapper mapper)
-        {
-            _logger = logger;
-            _mapper = mapper;
-            _mediator = mediator;
-        }
+    [HttpPost]
+    public async Task<IActionResult> Post(UploadFileRequest request, CancellationToken ct)
+    {
+        var command = new UploadFileCommand(request.filePath);
 
-        [HttpPost]
-        public async Task<IActionResult> Post(UploadFileRequest request, CancellationToken ct)
-        {
-            var command = new UploadFileCommand(request.filePath);
+        var result = await _mediator.Send(command, ct);
 
-            var result = await _mediator.Send(command, ct);
+        return result.Match(
+            result => Created(HttpContext.Request.Path, result),
+            errors => Problem(errors));
+    }
 
-            return result.Match(
-                result => Created(HttpContext.Request.Path, result),
-                errors => Problem(errors));
-        }
+    [HttpGet("results")]
+    public async Task<IActionResult> GetResults([FromQuery] GetFilteredResultsRequest request, CancellationToken ct)
+    {
+        var query = _mapper.Map<GetResultsQuery>(request);
 
-        [HttpGet("results")]
-        public async Task<IActionResult> GetResults([FromQuery] GetFilteredResultsRequest request, CancellationToken ct)
-        {
-            var query = _mapper.Map<GetResultsQuery>(request);
+        var result = await _mediator.Send(query, ct);
 
-            var result = await _mediator.Send(query, ct);
+        return result.Match(
+            result => Ok(result),
+            errors => Problem(errors));
+    }
 
-            return result.Match(
-                result => Ok(result),
-                errors => Problem(errors));
-        }
+    [HttpGet("metrics")]
+    public async Task<IActionResult> GetLatestMetrics([FromQuery] GetLatestValuesRequest request, CancellationToken ct)
+    {
+        var query = _mapper.Map<GetLatestMetricsQuery>(request);
 
-        [HttpGet("metrics")]
-        public async Task<IActionResult> GetLatestMetrics([FromQuery] GetLatestValuesRequest request, CancellationToken ct)
-        {
-            var query = _mapper.Map<GetLatestMetricsQuery>(request);
+        var result = await _mediator.Send(query, ct);
 
-            var result = await _mediator.Send(query, ct);
-
-            return result.Match(
-                result => Ok(result),
-                errors => Problem(errors));
-        }
+        return result.Match(
+            result => Ok(result),
+            errors => Problem(errors));
     }
 }

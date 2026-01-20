@@ -27,9 +27,12 @@ public class UploadFileCommandHandler : IRequestHandler<UploadFileCommand, Error
         string fileName = Path.GetFileName(request.FilePath);
 
         using var stream = File.OpenRead(request.FilePath);
-        var metrics = _csvParser.Parse(stream, fileName);
 
-        var fileResult = FileResult.Create(fileName, metrics);
+        var parseResult = _csvParser.Parse(stream, fileName);
+        if (parseResult.IsError)
+            return parseResult.FirstError;
+
+        var fileResult = FileResult.Create(fileName, parseResult.Value);
         var calculateResult = fileResult.CalculateFileResult();
 
         if(calculateResult.IsError)
